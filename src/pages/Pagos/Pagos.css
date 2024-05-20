@@ -1,0 +1,46 @@
+.o-container-pagos{
+    width: 848px;
+    height: 344px;
+    background-color: #FFFFFF;
+    box-shadow: #E2E8F0;
+    border-radius: 8px;
+}
+
+.o-navbar-pagos{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 18px 0 18px;
+}
+
+.o-navbar-pagos div:nth-child(2){
+    display: flex;
+    flex-direction: row;
+    gap: 20px
+}
+
+.o-navbar-pagos span{
+    color: #FF7A66;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.o-navbar-pagos button{
+    border: none;
+    background-color: transparent;
+    color: #FF7A66;
+    cursor: pointer;
+}
+
+
+.o-navbar-pagos p{
+    color: #94A3B8;
+}
+
+.o-navbar-pagos strong{
+    color: #0F172A;
+}
