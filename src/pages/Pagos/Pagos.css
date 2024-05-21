@@ -1,4 +1,4 @@
-.o-container-pagos{
+.o-container-debt{
     width: 848px;
     height: 344px;
     background-color: #FFFFFF;
@@ -6,20 +6,20 @@
     border-radius: 8px;
 }
 
-.o-navbar-pagos{
+.o-navbar-debt{
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 18px 0 18px;
 }
 
-.o-navbar-pagos div:nth-child(2){
+.o-navbar-debt div:nth-child(2){
     display: flex;
     flex-direction: row;
     gap: 20px
 }
 
-.o-navbar-pagos span{
+.o-navbar-debt span{
     color: #FF7A66;
     text-align: center;
     display: flex;
@@ -29,7 +29,7 @@
     cursor: pointer;
 }
 
-.o-navbar-pagos button{
+.o-navbar-debt button{
     border: none;
     background-color: transparent;
     color: #FF7A66;
@@ -37,10 +37,102 @@
 }
 
 
-.o-navbar-pagos p{
+.o-navbar-debt p{
     color: #94A3B8;
 }
 
-.o-navbar-pagos strong{
+.o-navbar-debt strong{
     color: #0F172A;
 }
+
+.o-container-quotas-debt{
+    display: flex;
+    align-items: flex-start;
+    margin-top: 52px;
+    margin-left: 20px;
+    gap: 25px;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    width: calc(100% - 40px); /* Adjust width to fit the content */
+}
+
+.o-quotas{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    flex-shrink: 0;
+    /* position: relative; */
+}
+
+/* .o-conector{
+    position: absolute; 
+    top: 16%; 
+    left: 62%;
+    height: 2px;
+    background-color: #ccc;
+    width: 100px; 
+    z-index: 0;
+} */
+
+.o-quotas span{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 48px;
+    height: 48px;
+    background-color: #F8FAFC;
+    border-radius: 50px;
+    border: 3px solid #FC4024;
+    cursor: pointer;
+    flex-shrink: 0;
+    /* z-index: 2; */
+}
+
+.o-icon-payment{
+    opacity: 0;
+    transition: opacity 0.3s ease; 
+}
+
+.o-quotas span:hover .o-icon-payment{
+    opacity: 1;
+}
+
+.o-quotas p{
+    margin: 4px;
+    color: #0F172A;
+}
+
+.o-button-add-quota{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 8px;
+    flex-shrink: 0;
+}
+
+.o-button-add-quota span{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    background-color: #E2E8F0;
+    border-radius: 50px;
+    color: #FC4024;
+    cursor: pointer;
+    /* z-index: 2; */
+}
+
+.o-button-add-quota p{
+    margin: 0px;
+    font-size: 12px;
+    color: #64748B;
+    opacity: 0;
+    transition: opacity 0.3s ease; 
+}
+
+.o-button-add-quota:hover p {
+    opacity: 1;
+}
+
