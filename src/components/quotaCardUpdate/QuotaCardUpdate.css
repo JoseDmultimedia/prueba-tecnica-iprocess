@@ -40,8 +40,24 @@
     width: 110px;
     height: 24px;
     border-radius: 3px;
-    border: .5 solid #94A3B8;
+    border: .5px solid #94A3B8;
 
+}
+
+.o-debt-text{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 110px;
+    height: 24px;
+    border-radius: 3px;
+    border: .5px solid #94A3B8;
+    padding: 1px 2px 1px 2px;
+}
+
+.o-debt-text p:nth-child(2){
+    color: #94A3B8;
 }
 
 .o-container-input input:nth-child(1){

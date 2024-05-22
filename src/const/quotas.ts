@@ -23,7 +23,7 @@ export const quotasRaw = [
 ];
 
 //Info de la deuda general
-export const generalDebt = {
+export const generalDebtRaw = {
     debt : 182,
     currency : 'USD'
 }
