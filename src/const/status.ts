@@ -1,7 +1,7 @@
 export const APP_STATUS = {
-    IDLE: "idle", //Iniciar
+    IDLE: "idle", //Iniciar - Default
     ERROR: "error", //Error
-    UPDATE: "ready_upload", // Actualizar
+    UPDATE: "ready_update", // Actualizar
     CREATE : "ready_create", // Crear
   } as const;
   
