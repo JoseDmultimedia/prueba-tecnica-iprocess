@@ -32,6 +32,10 @@ function QuotaCard(props : Props) {
 
     const formatDate = dayjs(dateToPay).format('DD/MM/YYYY');
 
+    /*
+        Me falto un elemento visual que es el conector lo deje comentado 
+    */
+
   return (
     <>
     {state === 'Pendiente' && (

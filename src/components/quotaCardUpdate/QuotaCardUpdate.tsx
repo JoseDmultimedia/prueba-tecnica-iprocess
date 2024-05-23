@@ -42,9 +42,14 @@ function QuotaCardUpdate(props : Props) {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
     }
 
+    /*
+      Al usar el datePicker de mui, como es dependiente de la libreria Day.js lo ultilice para el
+      formato en algunos momentos de la fecha pero, pues se puede mejorar el manejo de ese formateo 
+      de la fecha a travez de todo el flujo de la aplicación tal vez con una funcion dentro de utils 
+      que me realice el formato para no duplicidad del formateo. 
+    */
   return (
     <>
       <div className="o-quotas-update">

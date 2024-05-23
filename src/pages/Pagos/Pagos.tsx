@@ -7,6 +7,8 @@ import { QuotaCard } from "../../components/quotaCard/QuotaCard";
 import { QuotaCardUpdate } from "../../components/quotaCardUpdate/QuotaCardUpdate";
 import { quotasRaw, generalDebtRaw } from "../../const/quotas";
 import dayjs, { Dayjs } from "dayjs";
+import Modal from '@mui/material/Modal';
+import { Toaster, toast } from "sonner";
 interface Quota {
   id?: number;
   quotaName: string;
@@ -24,10 +26,73 @@ interface GeneralDebt {
 }
 
 function Pagos() {
+  /*
+    Decidí usar un estado para el flujo de la aplicación con el appStatus, 
+    esto con la idea de matener una traza de en donde cambia visualemente los compoentes 
+  */
 
   const [appStatus, setAppStatus] = useState<AppStatusType>(APP_STATUS.IDLE);
   const [quota, setQuota] = useState<Quota[]>(quotasRaw);
   const [generalDebt, setGenetalDebt] = useState<GeneralDebt>(generalDebtRaw);
+
+  /*
+  TODO -> Api call
+    Si hubiera conexión con backend en esta instancia haria el llamado a las funciones que 
+    hacen fetch en la api, con la idea de usar un efecto (useEffect) para actualizar los objectos 
+    traidos 
+  */
+  const [open, setOpen] = useState(false);
+  const [selectedQuotaIndex, setSelectedQuotaIndex] = useState<number | null>(null);
+
+  const handleOpen = (index: number) => {
+    return () => {
+      setSelectedQuotaIndex(index);
+      setOpen(true);
+    }
+  };
+
+  const handleClose = () => {
+    setSelectedQuotaIndex(null);
+    setOpen(false);
+  };
+
+  /*
+    decidí manejar la actualización del pago de la cuaota y de la deuda general en el evento
+    onSubmit del Form, con la idea de tener consistencia, agregue una validación que permite saber 
+    si una cuota anterior no se ha pagado con la idea de retroalimentar al usuario con un mensaje 
+  */
+
+  const handleModalSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const methodPayment = formData.get('methodPayment') as string;
+
+
+    if(selectedQuotaIndex !== null){
+
+      if(quota[selectedQuotaIndex - 1] && quota[selectedQuotaIndex - 1].state === 'Pendiente' ){
+        toast.error('Tienes un pago anterior pendiente por pagar');
+      }else{
+        setQuota((prevItems) => {
+          const updatedQuota = [...prevItems];
+          updatedQuota[selectedQuotaIndex] = {
+            ...updatedQuota[selectedQuotaIndex],
+            state : 'Pagado',
+            paymentMethod: methodPayment,
+            payDate: (new Date()).toDateString()
+          };
+          return updatedQuota;
+        })
+  
+        setGenetalDebt((prevDebt) => ({
+          ...prevDebt,
+          debt : prevDebt.debt - quota[selectedQuotaIndex].quotaDebt
+        }))
+      }
+    }
+
+    handleClose();
+  }
 
   const addQuotaAtIndex = (index: number, newItem: Quota) => {
     setQuota((prevItems) => [
@@ -37,9 +102,21 @@ function Pagos() {
     ]);
   };
 
-  // todo -> hacer una condciion que verfique que el pago esta compelto, si no dejar crear cuotas 
+  /*
+    decide que la función de agregar una nueva cuota, tuviera una condición que permita identificar
+    si el pago de la deuda ya fue saldado, personalmente, esta opción se me ocurrio de esta manera, pero
+    creo que hay una mejor manera de realizarlo, ya que este trigger se da desde el evento onCLick, seria
+    tal vez bueno que se desde el momento en que se salda la deuda. 
+  */
+
+ 
   const addNewQuota = (index: number) => {
     return () => {
+      if(generalDebt.debt === 0){
+        toast.success('Ya realizaste el pago de tu deuda, no puedes crear mas cuotas')
+        return
+      }
+
       if(quota[index].state === 'Pendiente'){
         const newPercentage = quota[index].percentage / 2;
         const newQuotaDebt = (generalDebt.debt * newPercentage) / 100;
@@ -83,6 +160,12 @@ function Pagos() {
      
     };
   };
+
+  /*
+    Decidí usar las funciones de actualización del estado de cuotas para poder actualizar tanto los
+    porcentages como los valores en deuda de las cuotas, teniendo en cuenta la condición de si el previo
+    es pendiente, si no, la siguiente cuota. 
+  */
 
   const updatePercentage = (index: number, valueToCalculate: number) => {
     setQuota((prevItems) => {
@@ -168,8 +251,19 @@ function Pagos() {
     setAppStatus(APP_STATUS.IDLE);
   }
 
+  /*
+    En cuanto a los componentes, decidí usar el componente de DatePicker de la libreria de MUI
+    con la idea de no reiventar la rueda, tambien el toast de sonner para retroalimentación, como
+    tambien la libreria de react icons.
+    
+    Decidí tener dos componentes para las cards de cuotas uno con el layout de visualización y 
+    otro para el layout de actualización de las cuotas, creo que se podria mejorar esa componetización, 
+    tal vex teniendo un solo componente que se modifique de acuerdo al estado del flujo AppStatus.
+  */
+
   return (
     <div className="o-container-debt">
+      <Toaster />
       <div className="o-navbar-debt">
         <div>
           <span>
@@ -208,7 +302,7 @@ function Pagos() {
               paymentMethod={quota.paymentMethod}
               currency={generalDebt.currency}
               addNewQuota={addNewQuota(index)}
-              payQuota={() => console.log('Pagar cuota')}
+              payQuota={handleOpen(index)}
             />
           ))}
         {(appStatus === APP_STATUS.UPDATE || appStatus === APP_STATUS.CREATE) &&
@@ -227,6 +321,24 @@ function Pagos() {
             />
           ))}
       </div>
+      <Modal
+       open={open}
+       onClose={handleClose}>
+        <div className="o-modal-payment">
+          <h2>Pagar</h2>
+          <p>Selecciona metodo de pago</p>
+          <form className="o-form-payment-modal" onSubmit={handleModalSubmit} >
+            <div>
+              <label htmlFor="methodPayment">Estado: <br/></label>
+              <select name="methodPayment" id="methodPayment" className="o-select-payment">
+                <option value="Efectivo">Efectivo</option>
+                <option value="Tarjeta">Tarjeta</option>
+              </select>
+            </div>
+            <input type="submit" value="Guardar" className="o-button-navbar-debt-update"></input>
+          </form>
+        </div>
+      </Modal>
     </div>
   );
 }
